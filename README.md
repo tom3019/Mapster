@@ -138,5 +138,5 @@ public class MemberRegister : IRegister
 
 參考:
 
-[Mapster]: https://github.com/MapsterMapper/Mapster
+[Mapster]: https://github.com/MapsterMapper/Mapster	"Mapster"
 
