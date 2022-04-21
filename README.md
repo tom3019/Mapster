@@ -1,5 +1,7 @@
 # Mapster 使用說明
-自己產生Dto等calss需安裝Mapster.Tool
+
+## 套件自動產生Model
+### 安裝Mapster.Tool
 ``` PowerShell
 dotnet new tool-manifest 
 dotnet tool install Mapster.Tool
@@ -45,18 +47,6 @@ dotnet mapster mapper //生成從介面產生的映射方法
 
 ```
 
-web api 安裝套件
-``` PowerShell
-Install-Package Mapster
-Install-Package Mapster.DependencyInjection
-```
-
-startup or Program
-``` csharp
-    var config = TypeAdapterConfig.GlobalSettings;
-    services.AddSingleton(config);
-    services.AddScoped<IMapper, ServiceMapper>();
-```
 
 產生對應的Dto(使用Attribute)
 ```
@@ -91,21 +81,37 @@ public class MemberRegister: ICodeGenerationRegister
 
 ```
 
-設定完之後build project
-會產生MemberDto以及MemberMapper擴充方法
+> :warning: 不建議在專案上使用自動產生Model，除非大家都有裝套件
+
+>設定完之後build project會產生MemberDto以及MemberMapper擴充方法
 但第一次build的時候MemberMapper裡面會沒有內容
 這是因為第一次build的時候dto並不存在
 所以需要再rebuild一次
-注意:是rebuild不是build，第一次build完後沒有修改內容，第二次build會使用第一次build的內容，導致MemberMapper還是空的
+是rebuild不是build，第一次build完後沒有修改內容，第二次build會使用第一次build的內容，導致MemberMapper還是空的
 
-映射使用說明:
-簡單映射
-跟autoMapper依樣，且不用設定config
+## 開始使用
+### web api 安裝套件
+``` PowerShell
+Install-Package Mapster
+Install-Package Mapster.DependencyInjection
+```
+
+### Dependency Injection
+startup or Program
+``` csharp
+    var config = TypeAdapterConfig.GlobalSettings;
+    services.AddSingleton(config);
+    services.AddScoped<IMapper, ServiceMapper>();
+```
+
+### 映射使用說明:
+簡單映射:跟autoMapper依樣，可不用設定config
+> :warning: 建議設定config
 
 ```csharp
     注入IMapper
     private readonly IMapper _mapper;
-	public class(Imapper mapper) => _mapper = mapper
+    public class(Imapper mapper) => _mapper = mapper
 	
     var memberDto = _mapper.Map<MemberDto>(member);
 ```
@@ -127,7 +133,7 @@ public class MemberRegister : IRegister
 	{
 		config.NewConfig<Member, MemberDto>();
 			 .Map(m => m.Email, o => o.Password)
-			 //雙向映射
+	    //雙向映射
             .TwoWays();
           
 	}
@@ -136,7 +142,6 @@ public class MemberRegister : IRegister
 
 
 
-參考:
-
-[Mapster]: https://github.com/MapsterMapper/Mapster	"Mapster"
+## 參考:
+[Mapster](https://github.com/MapsterMapper/Mapster)
 
