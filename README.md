@@ -100,6 +100,8 @@ Install-Package Mapster.DependencyInjection
 startup or Program
 ``` csharp
     var config = TypeAdapterConfig.GlobalSettings;
+    //加入自訂映射
+    config.Scan(typeof(MemberRegister).Assembly);
     services.AddSingleton(config);
     services.AddScoped<IMapper, ServiceMapper>();
 ```
